@@ -1,0 +1,73 @@
+//+------------------------------------------------------------------+
+//|                                                  EA Bloom        |
+//|                Copyright 2021, ForexRobotEasy.com                |
+//+------------------------------------------------------------------+
+#include <Trade\Trade.mqh>
+
+// Input parameters
+input double MaxDrawdownPercent = 20.0; // Max drawdown percentage for closing all trades
+input double TakeProfit = 50;           // Take profit level in pips
+input double StopLoss = 25;             // Stop loss level in pips
+input double TrailingStop = 10;         // Trailing stop in pips
+input double BreakEven = 20;            // Break-even level in pips
+
+CTrade trade; // Trade object for performing trade operations
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+  {
+   // Initialization logic for EA Bloom
+   return(INIT_SUCCEEDED);
+  }
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+  {
+   // Main trading logic
+   // Implement the strategy for analyzing market conditions and opening trades
+
+   // Example: Check for virtual order conditions and market analysis
+   // If conditions are met, open a trade with specified parameters
+
+   // Monitor open positions and apply risk management strategies
+   ManageOpenPositions();
+  }
+
+//+------------------------------------------------------------------+
+//| Function to manage open positions                                |
+//+------------------------------------------------------------------+
+void ManageOpenPositions()
+  {
+   // Iterate through all open positions
+   for(int i = PositionsTotal() - 1; i >= 0; i--)
+     {
+      ulong ticket = PositionGetTicket(i);
+      if(PositionSelectByTicket(ticket))
+        {
+         double positionProfit = PositionGetDouble(POSITION_PROFIT);
+         double positionOpenPrice = PositionGetDouble(POSITION_PRICE_OPEN);
+
+         // Check for trailing stop and break-even logic
+         // ...
+
+         // Check for drawdown and close all trades if necessary
+         if(AccountInfoDouble(ACCOUNT_EQUITY) / AccountInfoDouble(ACCOUNT_BALANCE) <= (1 - MaxDrawdownPercent / 100))
+           {
+            trade.PositionClose(ticket);
+           }
+        }
+     }
+  }
+
+//+------------------------------------------------------------------+
+//| Additional functions and logic can be implemented here           |
+//+------------------------------------------------------------------+
+// Functions for market analysis, virtual order logic, and other trading strategies
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
